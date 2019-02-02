@@ -124,6 +124,9 @@
                         <li>
                             <a href="vehicles.php">Vehicle</a>
                         </li>
+                        <li>
+                            <a href="vdrivers.php">Vehicle Drivers</a>
+                        </li>
    <!--             <li>
                     <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Manage<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">

@@ -93,7 +93,8 @@ Class DBHelper{
         $values = implode(",",$val);
         $sql = "INSERT INTO $table($flds) VALUES($values)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute($data);
+       $ok= $stmt->execute($data);
+        
     }
 
     function deleteRecord($table,$field_id,$ref_id){

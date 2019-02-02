@@ -2,16 +2,12 @@
 
 require 'dbhelper/dbhelper.php';
 
-Class License extends DBHelper{
-    private $table = 'license';
+Class Vdrivers extends DBHelper{
+    private $table = 'vehicle_drivers';
     private $fields = array(
-        'license_id',
-        'license_type',
-        'license_restriction',
-        'license_issue_date',
-        'license_exp_date',
-        'license_nationality',
-        'license_status'
+        'driver_id',
+        'vehicle_plateNo',
+        'vehicle_drivers_date'
     );
     
     function __construct(){
@@ -21,12 +17,17 @@ Class License extends DBHelper{
 	/* function getUsers($id){
         return DBHelper::getAll($id); 
      } */
-     function getLicense(){
+     function getVdriver(){
          return DBHelper::getAll($this->table);
      }
-
-     function getEnforcerById($ref_id){
-         return DBHelper::getOne($this->table,'enforcer_id',$ref_id);
+     function getDriver(){
+        return DBHelper::getAll('driver');
+     }
+     function getVehicle(){
+        return DBHelper::getAll('vehicle');
+     }
+     function getVehicled($ref_id){
+         return DBHelper::getOne($this->table,'vehicle_plateNo',$ref_id);
      }
 
     /*
@@ -34,16 +35,16 @@ Class License extends DBHelper{
          return DBHelper::getById(array($table,$this->table.'p'),'p.prod_id',$ref_id);
      }
      */
-     function addLicense($data){
+     function addVdriver($data){
          return DBHelper::addRecord($data,$this->fields,$this->table); 
      }
  
-      function updateLicense($data){
-         return DBHelper::updateRecord($data,$this->fields,$this->table,'license_id'); 
+      function updateVdriver($data){
+         return DBHelper::updateRecord($data,$this->fields,$this->table,'vehicle_drivers_id'); 
       }
  
-      function deleteLicense($ref_id){
-          return DBHelper::deleteRecord($this->table,'license_id',$ref_id);
+      function deleteVdrivers($ref_id){
+          return DBHelper::deleteRecord($this->table,'vehicle_drivers_id',$ref_id);
       }
 
       function stats($status,$id){

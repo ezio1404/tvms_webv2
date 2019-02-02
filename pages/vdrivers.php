@@ -1,28 +1,44 @@
 <?php
-    include_once 'model/licenseModel.php';
-    $license = new License();
+    include_once 'model/vdriversModel.php';
+    $vdrivers = new Vdrivers();
+    $driver=$vdrivers->getDriver();
+    $vehicle =$vdrivers->getVehicle();
+    $okDriver=false;
+    $ok2=false;
+    
     if(isset($_SESSION['id']) && isset($_SESSION['head'])){
-        if(isset($_POST['add'])){
-            $type = $_POST['type'];
-            $res = $_POST['res'];
-            $issue = $_POST['issue'];
-            $exp = $_POST['exp'];
-            $national = $_POST['national'];
-            $status = 'Active';
-            $id = $_POST['id'];
-            $license->addLicense(array($id,$type,$res,$issue,$exp,$national,$status));
-            
+    
+            if(isset($_POST['add'])){
+                foreach($driver as $d){
+                    if($d['driver_id'] == $_POST['driver'])
+                        $okDriver=true;
+                }
+                foreach($vehicle as $v){
+                    if($v['vehicle_plateNo'] == $_POST['plate'])
+                        $ok2=true;
+                }
+                if($ok2 && $okDriver){
+                $plate = $_POST['plate'];
+                $driver = $_POST['driver'];
+                $current = Date('Y-m-d');
+                $ok=$vdrivers->addVdriver(array($driver,$plate,$current));
+                    if($ok){
+                        echo "<script> alert('Success Adding'); </script>";         
+                    }else{
+                        echo "<script> alert('Failed Adding'); </script>";
+                    }
+            }else{
+                echo "<script> alert('Error adding Driver and Vehicle'); </script>";
+            }
         }
+        
 
         if(isset($_POST['edit'])){
-            $type = $_POST['type'];
-            $res = $_POST['res'];
-            $issue = $_POST['issue'];
-            $exp = $_POST['exp'];
-            $national = $_POST['national'];
-            $status = $_POST['status'];
+            $plate = $_POST['plate'];
+            $driver = $_POST['driver'];
+            $current = Date('Y-m-d');
             $id = $_POST['id'];
-            $license->updateLicense(array($id,$type,$res,$issue,$exp,$national,$status,$id));
+            $vdrivers->updateVdriver(array($driver,$plate,$current,$id));
         }
     }
     else{
@@ -71,7 +87,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">License</h1>
+                        <h1 class="page-header">Vehicle Drivers</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -80,7 +96,7 @@
 
                 <div class="panel-body">
                         <p>
-                            <button type="button" class="btn btn-outline btn-info"  data-toggle="modal" data-target="#licenseModal">Add License</button>
+                            <button type="button" class="btn btn-outline btn-info"  data-toggle="modal" data-target="#licenseModal">Add Vehicle Drivers</button>
                         </p>
                 <!-- start modal -->
                 <!-- Modal -->
@@ -91,18 +107,12 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <h5 class="modal-title" id="licenseModalLabel">Add License</h5>
+                            <h5 class="modal-title" id="licenseModalLabel">Add Vehicle Drivers</h5>
                             </div>
                             <div class="modal-body">
                         <form method = 'POST'>
-                            <input type="number" name="id" class="form-control" placeholder="License ID" required autofocus><br>
-                            <input type="text" name="type" class="form-control" placeholder="License Type" required autofocus><br>
-                            <input type="text" name="res" class="form-control" placeholder="License Restriction" required autofocus><br>
-                            <p>Date Issued</p>
-                            <input type="date" name="issue" class="form-control" required autofocus><br>
-                            <p>Expiration Date</p>
-                            <input type="date" name="exp" class="form-control" required autofocus><br>
-                            <input type="text" name="national" class="form-control" placeholder="Nationality" required autofocus><br>
+                            <input type="text" name="driver" class="form-control" placeholder="Driver's ID" required autofocus><br>
+                            <input type="text" name="plate" class="form-control" placeholder="Plate Number" required autofocus><br>
                         </div>
                         <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -119,39 +129,26 @@
                             <table class="table table-hover table-striped table-bordered" id="example" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>License ID</th>
-                                        <!-- <th>Owner</th> -->
-                                        <th>Type</th>
-                                        <th>Restriction</th>
-                                        <th>Issue Date</th>
-                                        <th>Expiry Date</th>
-                                        <th>Status</th>
+                                        <th>Vehicle Drivers ID</th>
+                                        <th>Drivers ID</th>
+                                        <th>Plate No.</th>
+                                        <th>Date</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 <?php
-                                    $data = $license->getLicense();
+                                    $data = $vdrivers->getVdriver();
                                     foreach($data as $datas){
                                 ?>
                                     <tr>
-                                        <td><?php echo $datas['license_id'] ?></td>
-                                        <!-- <td><?php //echo $datas['driver_fname'].' '.$datas['driver_mi'].'. '.$datas['driver_lname'] ?></td> -->
-                                        <td><?php echo $datas['license_type'] ?></td>
-                                        <td><?php echo $datas['license_restriction'] ?></td>
-                                        <td><?php echo $datas['license_issue_date'] ?></td>
-                                        <td><?php echo $datas['license_exp_date'] ?></td>
-                                        <td><?php echo $datas['license_status'] ?></td>
+                                        <td><?php echo $datas['vehicle_drivers_id'] ?></td>
+                                        <td><?php echo $datas['driver_id'] ?></td>
+                                        <td><?php echo $datas['vehicle_plateNo'] ?></td>
+                                        <td><?php echo $datas['vehicle_drivers_date'] ?></td>
                                         <td> 
-                                            <a href="#edit<?php echo $datas['license_id'] ?>" data-toggle="modal"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i></button>
-                                            <a onclick='javascript:confirmation($(this));return false;' href="deleteLicense.php?id=<?php echo $datas['license_id'] ?>"> <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i> </a> 
-                                            <?php if($datas['license_status'] == 'Active'){ ?>
-                                            <a onclick='javascript:status($(this));return false;' href="licenseStatus.php?status=<?php echo $datas['license_status']?>&id=<?php echo $datas['license_id'] ?>"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></a> 
-                                            <?php }
-                                                else{
-                                            ?>
-                                            <a onclick='javascript:status($(this));return false;' href="licenseStatus.php?status=<?php echo $datas['license_status']?>&id=<?php echo $datas['license_id'] ?>"><i class="fa fa-unlock fa-lg" aria-hidden="true"></i></a> 
-                                            <?php } ?>
+                                            <a href="#edit<?php echo $datas['vehicle_drivers_id'] ?>" data-toggle="modal"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true" style="text-decoration:none" ></i></button>
+                                            <a onclick='javascript:confirmation($(this));return false;' href="deleteV.php?id=<?php echo $datas['vehicle_drivers_id'] ?>" style="text-decoration:none" > <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i> </a> 
                                         </td>
                                     </tr>
                                 <?php
@@ -165,10 +162,10 @@
                     <!-- /.table-responsive panel body -->
                 <!-- Modal -->
             <?php
-                $data = $license->getLicense();
+                $data = $vdrivers->getVdriver();
                 foreach($data as $datas){
             ?>
-            <div class="modal fade" id="edit<?php echo $datas['license_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="enforcerModalLabel" aria-hidden="true">
+            <div class="modal fade" id="edit<?php echo $datas['vehicle_drivers_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="enforcerModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -179,15 +176,11 @@
                         </div>
                         <div class="modal-body">
                         <form method = 'POST'>
-                            <input type="hidden" name="id" class="form-control" value="<?php echo $datas['license_id'] ?>" required autofocus>
-                            <input type="hidden" name="status" class="form-control" value="<?php echo $datas['license_status'] ?>" required autofocus>
-                            <input type="text" name="type" class="form-control" value="<?php echo $datas['license_type'] ?>" required autofocus><br>
-                            <input type="text" name="res" class="form-control" value="<?php echo $datas['license_restriction'] ?>" required autofocus><br>
-                            <p>Date Issued</p>
-                            <input type="date" name="issue" class="form-control"  value="<?php echo $datas['license_issue_date'] ?>" required autofocus><br>
-                            <p>Expiration Date</p>
-                            <input type="date" name="exp" class="form-control" value="<?php echo $datas['license_exp_date'] ?>" required autofocus><br>
-                            <input type="text" name="national" class="form-control" value="<?php echo $datas['license_nationality'] ?>" required autofocus><br>
+                            <p>Driver's ID</p>
+                            <input type="text" name="driver" class="form-control" value="<?php echo $datas['driver_id'] ?>"  autofocus><br>
+                            <p>Plate No.</p>
+                            <input type="text" name="plate" class="form-control" value="<?php echo $datas['vehicle_plateNo'] ?>"  autofocus><br>
+                            <input type="hidden" name="id" class="form-control" value="<?php echo $datas['vehicle_drivers_id'] ?>"  autofocus><br>
                         </div>
                         <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -197,9 +190,9 @@
                     </div>
                     </div>
                 </div>
-                <?php } ?>
+                
                 <!-- endmodal -->
-
+                <?php } ?>
             </div>
             <!-- /.container-fluid -->
         </div>

@@ -2,13 +2,17 @@
     include_once 'model/vpModel.php';
     $violation = new Violation();
     if(isset($_SESSION['id']) && isset($_SESSION['head'])){
+        
         if(isset($_POST['add'])){
             $vcode = $_POST['vcode'];
             $vname = $_POST['vname'];
             $vdesc = $_POST['vdesc'];
             $vpenalty = $_POST['vpenalty'];
         
-            $violation->addViolation(array($vcode,$vname,$vdesc,$vpenalty,$_SESSION['id']));
+            $ok=$violation->addViolation(array($vcode,$vname,$vdesc,$vpenalty,$_SESSION['id']));
+            if(!$ok){
+                echo "<script> alert('Success'); </script>";    
+            }
         }
 
         if(isset($_POST['edit'])){
@@ -17,8 +21,12 @@
             $vnamee = $_POST['vnamee'];
             $vdesce = $_POST['vdesce'];
             $vpenaltye = $_POST['vpenaltye'];
-            $violation->updateViolation(array($vcodee,$vnamee,$vdesce,$vpenaltye,$_SESSION['id'],$vid));
+            $ok=$violation->updateViolation(array($vcodee,$vnamee,$vdesce,$vpenaltye,$_SESSION['id'],$vid));
+            if(!$ok){
+                echo "<script> alert('Success'); </script>";    
+            }
         }
+        
     }
     else{
         echo "<script> window.location='index.php'; </script>";

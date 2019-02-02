@@ -4,26 +4,24 @@
     if(isset($_SESSION['id']) && isset($_SESSION['head'])){
         if(isset($_POST['add'])){
             $plate = $_POST['plate'];
-            $number = $_POST['driver'];
             $brand = $_POST['brand'];
             $color = $_POST['color'];
             $register = $_POST['register'];
             $expire = $_POST['expire'];
             $status = $_POST['status'];
             $type = $_POST['type'];
-            $vehicle->addVehicle(array($plate,$number,$brand,$color,$register,$expire,$status,$type));
+            $vehicle->addVehicle(array($plate,$brand,$color,$register,$expire,$status,$type));
         }
 
         if(isset($_POST['edit'])){
             $plate = $_POST['plate'];
-            $number = $_POST['driver'];
             $brand = $_POST['brand'];
             $color = $_POST['color'];
             $register = $_POST['register'];
             $expire = $_POST['expire'];
             $status = $_POST['status'];
             $type = $_POST['type'];
-            $vehicle->updateVehicle(array($plate,$number,$brand,$color,$register,$expire,$status,$type,$plate));
+            $vehicle->updateVehicle(array($plate,$brand,$color,$register,$expire,$status,$type,$plate));
         }
     }
     else{
@@ -97,7 +95,6 @@
                             <div class="modal-body">
                         <form method = 'POST'>
                             <input type="text" name="plate" class="form-control" placeholder="Plate Number" required autofocus><br>
-                            <input type="number" name="driver" class="form-control" placeholder="Drivers ID" required autofocus><br>
                             <input type="text" name="brand" class="form-control" placeholder="Brand" required autofocus><br>
                             <input type="text" name="color" class="form-control" placeholder="Color" required autofocus><br>
                             <p>Last Registered Date</p>
@@ -123,7 +120,6 @@
                                 <thead>
                                     <tr>
                                         <th>Plate No.</th>
-                                        <th>Driver ID</th>
                                         <th>Date Registered</th>
                                         <th>Expiration Date</th>
                                         <th>Record Status</th>
@@ -140,7 +136,6 @@
                                 ?>
                                     <tr>
                                         <td><?php echo $datas['vehicle_plateNo'] ?></td>
-                                        <td><?php echo $datas['driver_id'] ?></td>
                                         <td><?php echo $datas['vehicle_lastRegisteredDate'] ?></td>
                                         <td><?php echo $datas['vehicle_expiryDate'] ?></td>
                                         <td><?php echo $datas['vehicle_status'] ?></td>
@@ -179,8 +174,6 @@
                         <form method = 'POST'>
                             <p>Plate Number</p>
                             <input type="text" name="plate" class="form-control" value="<?php echo $datas['vehicle_plateNo'] ?>"  autofocus><br>
-                            <p>Driver's ID</p>
-                            <input type="number" name="driver" class="form-control" value="<?php echo $datas['driver_id'] ?>"  autofocus><br>
                             <p>Brand</p>
                             <input type="text" name="brand" class="form-control" value="<?php echo $datas['vehicle_brand'] ?>"  autofocus><br>
                             <p>Color</p>

@@ -17,7 +17,12 @@
             $type = $_POST['type'];
             $date = $_POST['bday'];
             $id = $_SESSION['id'];
-            $enforcer->addEnforcer(array($lname,$fname,$mi,$addressP,$addressC,$mobile,$tel,$gender,$email,$password,$status,$type,$date,$id));
+            $ok=$enforcer->addEnforcer(array($lname,$fname,$mi,$addressP,$addressC,$mobile,$tel,$gender,$email,$password,$status,$type,$date,$id));
+            if($ok){
+                echo "<script> alert('Success Adding'); </script>";         
+            }else{
+                echo "<script> alert('Failed Adding'); </script>";
+            }
         }
         if(isset($_POST['edit'])){
             $lnamee = $_POST['lnamee'];
@@ -34,7 +39,12 @@
             $typee = $_POST['typee'];
             $datee = $_POST['bdaye'];
             $id = $_POST['id'];
-            $enforcer->updateEnforcer(array($lnamee,$fnamee,$mie,$addressPe,$addressCe,$mobilee,$tele,$gendere,$emaile,$password,$statuse,$typee,$datee,$_SESSION['id'],$id));
+            $ok=$enforcer->updateEnforcer(array($lnamee,$fnamee,$mie,$addressPe,$addressCe,$mobilee,$tele,$gendere,$emaile,$password,$statuse,$typee,$datee,$_SESSION['id'],$id));
+            if(!$ok){
+                echo "<script> alert('Success Updating'); </script>";         
+            }else{
+                echo "<script> alert('Failed Updating'); </script>";
+            }
         }
     }
     else{
@@ -114,12 +124,12 @@
                             <input type="number" name="mobile" class="form-control" placeholder="Mobile No." require autofocus><br>
                             <input type="number" name="tel" class="form-control" placeholder="Telephone No." require autofocus><br>
                             <p>Gender</p>
-                            <input type="radio" name="gender" class="text-center" value="Male" require autofocus>&nbsp&nbsp Male &nbsp&nbsp&nbsp
+                            <input type="radio" checked="true" name="gender" class="text-center" value="Male" require autofocus>&nbsp&nbsp Male &nbsp&nbsp&nbsp
                             <input type="radio" name="gender" class="text-center" value="Female" require autofocus>&nbsp&nbsp Female<br><br>
                             <input type="email" name="email" class="form-control" placeholder="Email" require autofocus><br>
                             <!-- <input type="password" name="password" class="form-control" placeholder="Password" require autofocus><br> --> 
                             <select name="type" class="form-control" placeholder="Type" require autofocus>
-                                <option value='' disabled selected>Type</option>
+                                <option value='null' disabled selected>Type</option>
                                 <option value='Traffic' >Traffic</option>
                                 <option value='Parking' >Parking</option>
                             </select><br>

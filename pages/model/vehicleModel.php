@@ -6,7 +6,6 @@ Class Vehicle extends DBHelper{
     private $table = 'vehicle';
     private $fields = array(
         'vehicle_plateNo',
-        'driver_id',
         'vehicle_brand',
         'vehicle_color',
         'vehicle_lastRegisteredDate',
@@ -25,6 +24,7 @@ Class Vehicle extends DBHelper{
      function getVehicle(){
          return DBHelper::getAll($this->table);
      }
+     
 
      function getVehicled($ref_id){
          return DBHelper::getOne($this->table,'vehicle_plateNo',$ref_id);
